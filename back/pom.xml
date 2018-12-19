@@ -12,7 +12,7 @@
 	<artifactId>KiDelicia</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>KiDelicia</name>
-	<description>Sistema para o gerenciamento de pedidos em um restaurante</description>
+	<description>System for order management in a restaurant</description>
 
 	<properties>
 		<java.version>1.8</java.version>
