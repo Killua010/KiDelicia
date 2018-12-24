@@ -4,7 +4,7 @@ import br.com.kidelicia.domain.DomainEntity;
 
 public interface Idto <Entity extends DomainEntity> {
 	
-	public void setObject(Entity entity);
+	public void setDto(Entity entity);
 	
-	public Entity setDto();
+	public DomainEntity getEntity();
 }
