@@ -29,7 +29,8 @@ public class DomainEntity implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	protected Long id;
 
-	protected Boolean status;
+	@Column(nullable = false)
+	protected Boolean status = true;
 	
 	@Override
 	public int hashCode() {

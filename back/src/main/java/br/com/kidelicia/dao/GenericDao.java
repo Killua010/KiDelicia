@@ -14,39 +14,39 @@ import br.com.kidelicia.repository.IRepository;
 
 @Service
 @Transactional
-public class GenericDao<entity extends DomainEntity> implements IDao<DomainEntity>{
+public class GenericDao<entity extends DomainEntity> implements IDao<entity>{
 	
 	@Autowired
 	private Map<String, IRepository<entity>> repositories;
 
 	@Override
-	public DomainEntity save(DomainEntity entity) {
+	public entity save(entity entity) {
 		return searchRepository(entity).save((entity) entity);
 	}
 
 	@Override
-	public List<DomainEntity> find(DomainEntity entity) {
+	public List<entity> find(entity entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public DomainEntity update(DomainEntity entity) {
+	public entity update(entity entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void delete(DomainEntity entity) {
+	public void delete(entity entity) {
 		// TODO Auto-generated method stub
 		
 	}
 	
-	private IRepository<entity> searchRepository(DomainEntity entity){
-		for (Entry<String, IRepository<entity>> e : repositories.entrySet()) {
-			if(e.getKey().toLowerCase()
-				.equals(entity.getClass().getSimpleName().concat("Repository").toLowerCase())) {
-				return e.getValue();
+	private IRepository<entity> searchRepository(entity entity){
+		for (Entry<String, IRepository<entity>> repository : repositories.entrySet()) {
+			if(repository.getKey().toLowerCase()
+					.equals(entity.getClass().getSimpleName().concat("Repository").toLowerCase())) {
+				return repository.getValue();
 			}
 		}
 		return null;
