@@ -1,5 +1,6 @@
 package br.com.kidelicia.dao;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -26,8 +27,11 @@ public class GenericDao<entity extends DomainEntity> implements IDao<entity>{
 
 	@Override
 	public List<entity> find(entity entity) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if(null != entity.getId()) {
+			return Arrays.asList(searchRepository(entity).findById(entity.getId()).orElse(null));
+		}
+		return searchRepository(entity).findAll();
 	}
 
 	@Override

@@ -1,7 +1,8 @@
 package br.com.kidelicia.command;
 
 import br.com.kidelicia.domain.DomainEntity;
+import br.com.kidelicia.utils.Result;
 
 public interface ICommand {
-	public String execute(DomainEntity entity);
+	public Result execute(DomainEntity entity);
 }
