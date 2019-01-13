@@ -14,4 +14,6 @@ public abstract class EntityDto implements Idto{
 	protected Long id;
 
 	protected Boolean status;
+	
+	public abstract DomainEntity getEntity(Long id, Boolean status);
 }

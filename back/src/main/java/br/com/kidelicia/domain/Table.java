@@ -25,7 +25,10 @@ public class Table extends DomainEntity implements Serializable {
 	@Column(name = "tbl_table_number")
 	private Integer tableNumber;
 	
-	
+	public Table(Integer number, Long id, Boolean status) {
+		super(id, status);
+		this.tableNumber = number;
+	}
 	
 
 }

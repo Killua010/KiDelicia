@@ -25,6 +25,11 @@ public class TableDto extends EntityDto {
 	public DomainEntity getEntity() {
 		return new Table(number);
 	}
+	
+	@Override
+	public DomainEntity getEntity(Long id, Boolean status) {
+		return new Table(number, id, status);
+	}
 
 	@Override
 	public List<EntityDto> getListDto(List<DomainEntity> entities) {
@@ -38,6 +43,5 @@ public class TableDto extends EntityDto {
 		}
 		return dtos;
 	}
-
 
 }

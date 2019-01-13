@@ -8,8 +8,8 @@ import br.com.kidelicia.domain.DomainEntity;
 
 public interface Idto {
 	
-	public List<EntityDto> getListDto(List<DomainEntity> entities);
+	List<EntityDto> getListDto(List<DomainEntity> entities);
 	
 	@JsonIgnore
-	public DomainEntity getEntity();
+	DomainEntity getEntity();
 }

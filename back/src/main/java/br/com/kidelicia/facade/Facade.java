@@ -43,10 +43,8 @@ public class Facade<entity extends DomainEntity> implements IFacade {
 	@Override
 	public Result find(DomainEntity entity) {
 		result = new Result();
-
 		result.setResultEntities(dao.find(entity));
-
-		if (result.getResultEntities().size() == 0) {
+		if (result.getResultEntities().size() == 0 || null == result.getResultEntities().get(0)) {
 			result.setResponse(new StringBuilder("Entidade não encontrada"));
 			result.setHttpStatus(404);
 		} else {
@@ -75,8 +73,10 @@ public class Facade<entity extends DomainEntity> implements IFacade {
 
 	@Override
 	public Result delete(DomainEntity entity) {
-		// TODO Auto-generated method stub
-		return null;
+		result = new Result();
+		dao.delete(entity);
+		result.setHttpStatus(204);
+		return result;
 	}
 
 	private StringBuilder executeStrategys(DomainEntity entity) {

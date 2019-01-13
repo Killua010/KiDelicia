@@ -42,8 +42,7 @@ public class GenericDao<entity extends DomainEntity> implements IDao<entity>{
 
 	@Override
 	public void delete(entity entity) {
-		// TODO Auto-generated method stub
-		
+		searchRepository(entity).delete(entity);
 	}
 	
 	private IRepository<entity> searchRepository(entity entity){
