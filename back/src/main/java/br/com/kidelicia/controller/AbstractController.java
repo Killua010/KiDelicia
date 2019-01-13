@@ -12,13 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.kidelicia.command.ICommand;
-import br.com.kidelicia.controller.utils.StandardResponse;
-import br.com.kidelicia.domain.DomainEntity;
+import br.com.kidelicia.controller.utils.HttpResponseEntity;
 import br.com.kidelicia.dto.EntityDto;
 import br.com.kidelicia.utils.Result;
 
@@ -29,7 +27,7 @@ public abstract class AbstractController <dto extends EntityDto> {
 	private List<ICommand> commands;
 	
 	@Autowired
-	private StandardResponse standardResponse;
+	private HttpResponseEntity standardResponse;
 	
 	
 	@PostMapping
@@ -38,7 +36,7 @@ public abstract class AbstractController <dto extends EntityDto> {
     }
 	
 	@GetMapping({"", "/{id}"})
-    public @ResponseBody ResponseEntity<Result> findAll(@RequestBody dto entity, @PathVariable(value="id",required=false) Long id){
+    public @ResponseBody ResponseEntity<Result> find(@RequestBody dto entity, @PathVariable(value="id",required=false) Long id){
 		return restResponse(searchCommand("Find").execute(entity.getEntity(id, null)));
     }
 	

@@ -1,4 +1,4 @@
-package br.com.kidelicia.strategy;
+package br.com.kidelicia.strategy.table;
 
 import java.util.Optional;
 
@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.kidelicia.domain.Table;
 import br.com.kidelicia.repository.TableRepository;
+import br.com.kidelicia.strategy.IStrategy;
 
 @Service
 public class StTableValidateExistence implements IStrategy<Table> {

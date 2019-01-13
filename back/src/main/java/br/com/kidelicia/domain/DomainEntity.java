@@ -1,9 +1,8 @@
 package br.com.kidelicia.domain;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,14 +23,25 @@ import lombok.Setter;
 public class DomainEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
 
 	@Column(nullable = false)
 	protected Boolean status = true;
-	
+
+	@Column(name = "creation_date", nullable = false, updatable = false)
+	protected LocalDateTime creationDate = LocalDateTime.now();
+
+	@Column(name = "last_update", nullable = false)
+	protected LocalDateTime lastUpdate = LocalDateTime.now();
+
+	public DomainEntity(Long id, Boolean status) {
+		this.id = id;
+		this.status = status;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -56,7 +66,5 @@ public class DomainEntity implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
-	
+
 }
