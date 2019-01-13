@@ -7,13 +7,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.kidelicia.command.ICommand;
 import br.com.kidelicia.controller.utils.StandardResponse;
+import br.com.kidelicia.domain.DomainEntity;
 import br.com.kidelicia.dto.EntityDto;
 import br.com.kidelicia.utils.Result;
 
@@ -36,6 +41,14 @@ public abstract class AbstractController <dto extends EntityDto> {
     public @ResponseBody ResponseEntity<Result> findAll(@RequestBody dto entity){
 		return restResponse(searchCommand("Find").execute(entity.getEntity()));
     }
+	
+	@PutMapping("/{id}")
+	public @ResponseBody ResponseEntity<Result> update(@RequestBody dto entity, @PathVariable Long id){
+		DomainEntity domain = entity.getEntity();
+		domain.setId(id);
+		return restResponse(searchCommand("Update").execute(domain));
+	}
+	
 	
 	private ICommand searchCommand(String operation) {
 		ICommand command = null;

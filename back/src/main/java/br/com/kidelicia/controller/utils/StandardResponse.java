@@ -15,26 +15,47 @@ import br.com.kidelicia.dto.Idto;
 import br.com.kidelicia.utils.Result;
 
 @Component
-public class StandardResponse <dto extends EntityDto>{
+public class StandardResponse <dto extends EntityDto> implements HttpResponseEntity {
 	
 	@Autowired
 	private List<Idto> dtos;
 	
-	public ResponseEntity<?> Status200(Result result){
+	@Override
+	public ResponseEntity<?> Status200 (Result result) {
 		Idto idto = searchDto(result.getResultEntities().get(0));
 		return ResponseEntity.ok().body(idto.getListDto(result.getResultEntities()));
 	}
 	
-	public ResponseEntity<?> Status201(Result result){
+	@Override
+	public ResponseEntity<?> Status201 (Result result) {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(result.getResultEntities().get(0).getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 	
-	public ResponseEntity<?> Status400(Result result){
+	@Override
+	public ResponseEntity<?> Status204 (Result result) {
+		return ResponseEntity.noContent().build();
+	}
+	
+	@Override
+	public ResponseEntity<?> Status400 (Result result) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result.getResponse());
 	}
 	
-	public ResponseEntity<?> Status404(Result result){
+	@Override
+	public ResponseEntity<?> Status401(Result result) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ResponseEntity<?> Status403(Result result) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public ResponseEntity<?> Status404 (Result result) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result.getResponse());
 	}
 	
