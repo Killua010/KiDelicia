@@ -1,15 +1,24 @@
 package br.com.kidelicia.facade;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.kidelicia.dao.GenericDao;
 import br.com.kidelicia.domain.DomainEntity;
+import br.com.kidelicia.strategy.IStrategy;
+import br.com.kidelicia.strategy.Sequence;
 import br.com.kidelicia.utils.Result;
 
 @Service
 public class Facade<entity extends DomainEntity> implements IFacade {
-
+	
+	@Autowired
+	private Map<String, Sequence<entity>> listNavigations = new HashMap<String, Sequence<entity>>();
+	
 	@Autowired
 	private GenericDao dao;
 
@@ -17,9 +26,10 @@ public class Facade<entity extends DomainEntity> implements IFacade {
 
 	@Override
 	public Result save(DomainEntity entity) {
+		
 		result = new Result();
 
-		StringBuilder errors = executeStrategys(entity);
+		StringBuilder errors = runStrategys(entity, "Save");
 
 		if (errors.length() == 0) {
 			result.getResultEntities().add(dao.save(entity));
@@ -51,7 +61,10 @@ public class Facade<entity extends DomainEntity> implements IFacade {
 	public Result update(DomainEntity entity) {
 		result = new Result();
 
-		StringBuilder errors = executeStrategys(entity);
+		DomainEntity newEntity = (DomainEntity) dao.find(entity).get(0);
+		entity.setStatus((null == entity.getStatus()) ? newEntity.getStatus() : entity.getStatus());
+		
+		StringBuilder errors = runStrategys(entity, "Update");
 
 		if (errors.length() == 0) {
 			result.getResultEntities().add(dao.save(entity));
@@ -72,16 +85,20 @@ public class Facade<entity extends DomainEntity> implements IFacade {
 		return result;
 	}
 
-	private StringBuilder executeStrategys(DomainEntity entity) {
+	private StringBuilder runStrategys(DomainEntity entity, String operation) {
 		StringBuilder errors = new StringBuilder();
 
-//		for (IStrategy<entity> st : strategys) {
-//			for (AnnotatedType a : st.getClass().getAnnotatedInterfaces()) {
-//				if (a.getType().getTypeName().contains(entity.getClass().getName())) {
-//					errors.append(st.execute((entity) entity));
-//				}
-//			}
-//		}
+		for (Entry<String, Sequence<entity>> strategy : listNavigations.entrySet()) {
+			if(strategy.getKey().toLowerCase()
+					.equals(operation.concat("_").concat(entity.getClass().getSimpleName()).toLowerCase())) {
+				
+				for(IStrategy<entity> iStrategy : strategy.getValue().getIStrategies()) {
+					errors.append(iStrategy.execute((entity) entity));
+				}
+				
+			}
+
+		}
 
 		return errors;
 	}

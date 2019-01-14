@@ -37,17 +37,17 @@ public abstract class AbstractController <dto extends EntityDto> {
 	
 	@GetMapping({"", "/{id}"})
     public @ResponseBody ResponseEntity<Result> find(@RequestBody dto entity, @PathVariable(value="id",required=false) Long id){
-		return restResponse(searchCommand("Find").execute(entity.getEntity(id, null)));
+		return restResponse(searchCommand("Find").execute(entity.getEntity(id)));
     }
 	
 	@PutMapping("/{id}")
 	public @ResponseBody ResponseEntity<Result> update(@RequestBody dto entity, @PathVariable Long id){
-		return restResponse(searchCommand("Update").execute(entity.getEntity(id, null)));
+		return restResponse(searchCommand("Update").execute(entity.getEntity(id)));
 	}
 	
 	@DeleteMapping("/{id}")
 	public @ResponseBody ResponseEntity<Result> delete(@RequestBody dto entity, @PathVariable Long id){
-		return restResponse(searchCommand("Delete").execute(entity.getEntity(id, null)));
+		return restResponse(searchCommand("Delete").execute(entity.getEntity(id)));
 	}
 	
 	

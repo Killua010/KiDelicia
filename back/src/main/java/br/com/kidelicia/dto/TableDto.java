@@ -27,7 +27,8 @@ public class TableDto extends EntityDto {
 	}
 	
 	@Override
-	public DomainEntity getEntity(Long id, Boolean status) {
+	public DomainEntity getEntity(Long id) {
+		Boolean status = (null == this.status) ? null : this.status;
 		return new Table(number, id, status);
 	}
 
