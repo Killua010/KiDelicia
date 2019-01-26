@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import TableService from '../../services/table/TableService';
+
 import {
   Card, 
   Row,
@@ -15,11 +17,19 @@ import {
 export default class RestaurantTable extends Component {
   constructor(props) {
     super(props);
+    
     this.state = {
-      statusModal: false
+      statusModal: false,
+      tables: []
     };
+
     this.modal = this.modal.bind(this);
+
+    new TableService().getAllTables().then(val => this.setState({
+      tables: val
+    }))
   }
+
 
   modal(){
     this.setState({
@@ -36,7 +46,7 @@ export default class RestaurantTable extends Component {
                 <CardHeader>
                 <Row>
                   <Col sm="6">
-                    <h5 className="title">Mesas Atuais</h5>
+                    <h4 className="title">Mesas Atuais</h4>
                   </Col>
                   <Col sm="6">
                     <Button tag="label"
@@ -58,18 +68,16 @@ export default class RestaurantTable extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td className="text-center">20</td>
-                        <td className="text-center"><i className="tim-icons icon-trash-simple"></i></td>
-                      </tr>
-                      <tr>
-                        <td className="text-center">30</td>
-                        <td className="text-center"><i className="tim-icons icon-trash-simple"></i></td>
-                      </tr>
-                      <tr>
-                        <td className="text-center">40</td>
-                        <td className="text-center"><i className="tim-icons icon-trash-simple"></i></td>
-                      </tr>
+                    { 
+                      this.state.tables.map((table, index) => {
+                          return (
+                            <tr key={index}>
+                              <td className="text-center">{table.number}</td>
+                              <td className="text-center"><i className="tim-icons icon-trash-simple"></i></td>
+                            </tr>
+                          )
+                      })
+                    }
                     </tbody>
                   </Table>
                 </CardBody>

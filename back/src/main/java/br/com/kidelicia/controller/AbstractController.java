@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,8 +21,12 @@ import br.com.kidelicia.controller.utils.HttpResponseEntity;
 import br.com.kidelicia.dto.EntityDto;
 import br.com.kidelicia.utils.Result;
 
+@CrossOrigin
 @RestController
 public abstract class AbstractController <dto extends EntityDto> {
+	
+	@Autowired
+	private EntityDto entity;
 	
 	@Autowired
 	private List<ICommand> commands;
@@ -36,7 +41,7 @@ public abstract class AbstractController <dto extends EntityDto> {
     }
 	
 	@GetMapping({"", "/{id}"})
-    public @ResponseBody ResponseEntity<Result> find(@RequestBody dto entity, @PathVariable(value="id",required=false) Long id){
+    public @ResponseBody ResponseEntity<Result> find(@PathVariable(value="id",required=false) Long id){
 		return restResponse(searchCommand("Find").execute(entity.getEntity(id)));
     }
 	
