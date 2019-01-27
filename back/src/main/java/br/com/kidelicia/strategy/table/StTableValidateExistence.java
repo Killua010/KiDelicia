@@ -20,7 +20,9 @@ public class StTableValidateExistence implements IStrategy<Table> {
 		Optional<Table> optionalTable = tableRepository.findActiveByNumberTable(entity.getTableNumber());
 		
 		if(optionalTable.isPresent()) {
-			return "Mesa já cadastrada no sistema";
+			if(!optionalTable.get().getId().equals(entity.getId())) {
+				return "Mesa já cadastrada no sistema";
+			}
 		}
 		return "";
 	}

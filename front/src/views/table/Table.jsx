@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import TableService from '../../services/table/TableService';
 import TableModal from './TableModal';
+import swal from 'sweetalert';
 
 import {
   Card, 
@@ -17,13 +18,13 @@ export default class RestaurantTable extends Component {
 
   constructor(props) {
     super(props);
-    
     this.tableService = new TableService();
 
     this.state = {
       statusModal: false,
       tables: [],
-      table: {}
+      table: {},
+      update: false
     };
 
     this.modal = this.modal.bind(this);
@@ -31,6 +32,8 @@ export default class RestaurantTable extends Component {
     this.updateData = this.updateData.bind(this)
     this.putTable = this.putTable.bind(this)
     this.postTable = this.postTable.bind(this)
+    this.deleteTable = this.deleteTable.bind(this)
+    this.executeEvent = this.executeEvent.bind(this)
 
     this.getAllTable()
   }
@@ -41,14 +44,21 @@ export default class RestaurantTable extends Component {
     }))
   }
 
-  putTable(table){
-    console.error("put")
-    console.log(this.tableService.putTables(table))
+  async putTable(table){
+    await this.tableService.putTable(table)
+    await this.getAllTable()
+    this.modal()
   }
 
-  postTable(table){
-    console.error("put")
-    console.log(this.tableService.postTables(table))
+  async postTable(table){
+    await this.tableService.postTable(table)
+    await this.getAllTable()
+    this.modal()
+  }
+
+  async deleteTable(table){
+    await this.tableService.deleteTable(table)
+    await this.getAllTable()
   }
 
   saveTable(){
@@ -66,9 +76,17 @@ export default class RestaurantTable extends Component {
   updateData(value){
     this.setState({
       table: {
+        ...this.state.table,
         number: value.target.value
       }
     })
+  }
+
+  executeEvent(table){ 
+    if(this.state.update === false)
+      this.postTable(table)
+    else  
+      this.putTable(table)
   }
 
   modal(table){
@@ -87,10 +105,28 @@ export default class RestaurantTable extends Component {
     })
   }
 
+  removeTable(table){
+    swal({
+      title: 'Tem certeza que deseja excluir essa mesa?',
+      icon: 'warning',
+      buttons: {
+        cancel: 'Não, cancelar',
+        confirm: {
+          text: 'Sim, desejo deletar!',
+          className: "btn-warning"
+          }
+      }
+    }).then((result) => {
+      if(result){
+        this.deleteTable(table)
+      }
+    })
+  }
+
   render() {
     return (
+      
       <div className="content">
-        
             <Col xs="12">
               <Card className="card-chart">
                 <CardHeader>
@@ -123,7 +159,7 @@ export default class RestaurantTable extends Component {
                           return (
                             <tr key={index}>
                               <td className="text-center hover-point" onClick={() => { this.modal(table); this.updateTable()} }>{table.number}</td>
-                              <td className="text-center"><i className="tim-icons icon-trash-simple"></i></td>
+                              <td className="text-center"><a href="#" className="text-danger" onClick={() => this.removeTable(table)}><i className="tim-icons icon-trash-simple"></i></a></td>
                             </tr>
                           )
                       })
@@ -136,8 +172,9 @@ export default class RestaurantTable extends Component {
           <TableModal statusModal={this.state.statusModal} 
                       modal={this.modal} 
                       table={this.state.table}
-                      event={(this.update === true) ? this.putTable : this.postTable}
-                      updateData={this.updateData}></TableModal>
+                      event={this.executeEvent}
+                      updateData={this.updateData}
+                      update={this.state.update}></TableModal>
       </div>
     )
   }

@@ -33,7 +33,8 @@ public class TableSequence {
 	
 	@Bean("UPDATE_TABLE")
 	public Sequence<Table> updateTable() {
-		return new Sequence<DomainEntity>()
+		return new Sequence<Table>()
+				.add(stTableValidateExistence)
 				.add(stLastUpdate);
 	}
 

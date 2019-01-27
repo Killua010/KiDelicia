@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,7 +38,7 @@ public abstract class AbstractController <dto extends EntityDto> {
 	
 	
 	@PostMapping
-    public @ResponseBody ResponseEntity<Result> save(@RequestBody dto entity){
+    public @ResponseBody ResponseEntity<Result> save(@Valid @RequestBody dto entity){
 		return restResponse(searchCommand("Save").execute(entity.getEntity()));
     }
 	
@@ -46,12 +48,12 @@ public abstract class AbstractController <dto extends EntityDto> {
     }
 	
 	@PutMapping("/{id}")
-	public @ResponseBody ResponseEntity<Result> update(@RequestBody dto entity, @PathVariable Long id){
+	public @ResponseBody ResponseEntity<Result> update(@Valid @RequestBody dto entity, @PathVariable Long id){
 		return restResponse(searchCommand("Update").execute(entity.getEntity(id)));
 	}
 	
 	@DeleteMapping("/{id}")
-	public @ResponseBody ResponseEntity<Result> delete(@RequestBody dto entity, @PathVariable Long id){
+	public @ResponseBody ResponseEntity<Result> delete(@PathVariable Long id){
 		return restResponse(searchCommand("Delete").execute(entity.getEntity(id)));
 	}
 	

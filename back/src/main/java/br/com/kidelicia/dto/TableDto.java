@@ -3,6 +3,11 @@ package br.com.kidelicia.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.stereotype.Component;
 
 import br.com.kidelicia.domain.DomainEntity;
@@ -19,6 +24,8 @@ import lombok.Setter;
 @Component
 public class TableDto extends EntityDto {
 	
+	@NotNull(message="O campo numero é obrigatório")
+	@Min(value = 1, message="Insira um valor inteiro positivo")
 	private Integer number;
 
 	@Override

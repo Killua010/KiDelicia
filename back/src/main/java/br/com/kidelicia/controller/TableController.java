@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.com.kidelicia.dto.TableDto;
 
-@CrossOrigin
+
 @Controller
 @RequestMapping("/tables")
 public class TableController extends AbstractController<TableDto>{
