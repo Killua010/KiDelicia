@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import TableService from '../../services/table/TableService';
+import TableModal from './TableModal';
 
 import {
   Card, 
@@ -10,30 +11,79 @@ import {
   CardBody,
   Button,
   Table,
-  Modal, ModalHeader, ModalBody, ModalFooter,
-  Input
 } from "reactstrap";
 
 export default class RestaurantTable extends Component {
+
   constructor(props) {
     super(props);
     
+    this.tableService = new TableService();
+
     this.state = {
       statusModal: false,
-      tables: []
+      tables: [],
+      table: {}
     };
 
     this.modal = this.modal.bind(this);
+    this.getAllTable = this.getAllTable.bind(this);
+    this.updateData = this.updateData.bind(this)
+    this.putTable = this.putTable.bind(this)
+    this.postTable = this.postTable.bind(this)
 
-    new TableService().getAllTables().then(val => this.setState({
+    this.getAllTable()
+  }
+
+  getAllTable(){
+    this.tableService.getAllTables().then(val => this.setState({
       tables: val
     }))
   }
 
+  putTable(table){
+    console.error("put")
+    console.log(this.tableService.putTables(table))
+  }
 
-  modal(){
+  postTable(table){
+    console.error("put")
+    console.log(this.tableService.postTables(table))
+  }
+
+  saveTable(){
     this.setState({
-      statusModal: !this.state.statusModal
+      update: false
+    })
+  }
+
+  updateTable(){
+    this.setState({
+      update: true
+    })
+  }
+
+  updateData(value){
+    this.setState({
+      table: {
+        number: value.target.value
+      }
+    })
+  }
+
+  modal(table){
+    if(table == null)
+      this.setState({
+        statusModal: !this.state.statusModal,
+        table: {
+          number: ''
+        },
+        update: false
+      })
+    else
+    this.setState({
+      statusModal: !this.state.statusModal,
+      table: table
     })
   }
 
@@ -53,7 +103,7 @@ export default class RestaurantTable extends Component {
                             className="btn-simple float-right"
                             color="warning"
                             size="md"
-                            onClick={this.modal}>
+                            onClick={() => { this.modal(); this.saveTable() } }>
                             Nova Mesa
                       </Button>
                     </Col>
@@ -72,7 +122,7 @@ export default class RestaurantTable extends Component {
                       this.state.tables.map((table, index) => {
                           return (
                             <tr key={index}>
-                              <td className="text-center">{table.number}</td>
+                              <td className="text-center hover-point" onClick={() => { this.modal(table); this.updateTable()} }>{table.number}</td>
                               <td className="text-center"><i className="tim-icons icon-trash-simple"></i></td>
                             </tr>
                           )
@@ -83,18 +133,11 @@ export default class RestaurantTable extends Component {
                 </CardBody>
             </Card>
           </Col>
-          <Modal isOpen={this.state.statusModal} toggle={this.modal}>
-            <ModalHeader>Nova Mesa</ModalHeader>
-            <ModalBody>
-              <form>
-                <Input type="number"></Input>
-              </form>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="second" onClick={this.modal}>Cancelar</Button>
-              <Button color="warning" onClick={this.modal}>Salvar</Button>
-          </ModalFooter>
-          </Modal>
+          <TableModal statusModal={this.state.statusModal} 
+                      modal={this.modal} 
+                      table={this.state.table}
+                      event={(this.update === true) ? this.putTable : this.postTable}
+                      updateData={this.updateData}></TableModal>
       </div>
     )
   }
