@@ -7,6 +7,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,7 +36,6 @@ public abstract class AbstractController <dto extends EntityDto> {
 	
 	@Autowired
 	private HttpResponseEntity standardResponse;
-	
 	
 	@PostMapping
     public @ResponseBody ResponseEntity<Result> save(@Valid @RequestBody dto entity){
