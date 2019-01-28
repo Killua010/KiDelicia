@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Implementation-Title: KiDelicia
-Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Version: 0.1.0-SNAPSHOT
 Built-By: daniel
 Implementation-Vendor-Id: br.com.kidelicia
 Build-Jdk: 1.8.0_191

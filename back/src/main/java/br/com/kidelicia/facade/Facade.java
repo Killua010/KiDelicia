@@ -1,5 +1,6 @@
 package br.com.kidelicia.facade;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -47,7 +48,7 @@ public class Facade<entity extends DomainEntity> implements IFacade {
 	public Result find(DomainEntity entity) {
 		result = new Result();
 		result.setResultEntities(dao.find(entity));
-		if (result.getResultEntities().size() == 0 || null == result.getResultEntities().get(0)) {
+		if (null != entity.getId() && (result.getResultEntities().size() == 0 || null == result.getResultEntities().get(0))) {
 			result.setResponse(new StringBuilder("Entidade não encontrada"));
 			result.setHttpStatus(404);
 		} else {

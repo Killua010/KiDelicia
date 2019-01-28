@@ -1,6 +1,7 @@
 package br.com.kidelicia.controller.utils;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,12 @@ public class StandardResponse <dto extends EntityDto> implements HttpResponseEnt
 	
 	@Override
 	public ResponseEntity<?> Status200 (Result result) {
-		Idto idto = searchDto(result.getResultEntities().get(0));
-		return ResponseEntity.ok().body(idto.getListDto(result.getResultEntities()));
+		if(result.getResultEntities().size() == 0) {
+			return ResponseEntity.ok().body(new ArrayList<>());
+		} else {
+			Idto idto = searchDto(result.getResultEntities().get(0));
+			return ResponseEntity.ok().body(idto.getListDto(result.getResultEntities()));
+		}
 	}
 	
 	@Override
