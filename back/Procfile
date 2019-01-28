@@ -1,1 +1,0 @@
-web: java -Dserver.port=$PORT -Dspring.profiles.active=prod -DKIDELICIADBCONFIG=bf46bdd0199097:2bfb8fa1@us-cdbr-iron-east-03.cleardb.net/heroku_98836fb1baf96da?reconnect=true $JAVA_OPTS -jar target/KiDelicia-0.1.0-SNAPSHOT.jar
