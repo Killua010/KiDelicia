@@ -1,1 +1,3 @@
-export const path = "http://localhost:8080";
+export const path = "https://kidelicia.herokuapp.com";
+// server path
+//https://kidelicia.herokuapp.com/

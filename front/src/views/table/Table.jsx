@@ -31,7 +31,7 @@ export default class RestaurantTable extends Component {
       table: {},
       update: false,
       loaderType: 'ball-pulse-sync',
-      blocking: false
+      blocking: true
     };
 
     this.modal = this.modal.bind(this);
@@ -42,14 +42,15 @@ export default class RestaurantTable extends Component {
     this.deleteTable = this.deleteTable.bind(this)
     this.executeEvent = this.executeEvent.bind(this)
     this.alterBlockUI = this.alterBlockUI.bind(this)
-
-    this.getAllTable()
+    this.alterBlockUIfalse = this.alterBlockUIfalse.bind(this)
+    
+    this.getAllTable();
   }
 
   getAllTable(){
     this.tableService.getAllTables().then(val => this.setState({
       tables: val
-    }))
+    })).then(() => this.alterBlockUIfalse())
   }
 
   async putTable(table){
@@ -73,6 +74,12 @@ export default class RestaurantTable extends Component {
     await this.tableService.deleteTable(table)
     await this.getAllTable()
     this.alterBlockUI()
+  }
+
+  alterBlockUIfalse(){
+    this.setState({
+      blocking: false
+    })
   }
 
   alterBlockUI(){
@@ -145,7 +152,6 @@ export default class RestaurantTable extends Component {
 
   render() {
     return (
-      
       <div className="content">
         <BlockUi tag="div" blocking={this.state.blocking} loader={<Loader active type={this.state.loaderType} color="#02a17c"/>}>
             <Col xs="12">
@@ -176,14 +182,15 @@ export default class RestaurantTable extends Component {
                     </thead>
                     <tbody>
                     { 
-                      this.state.tables.map((table, index) => {
-                          return (
-                            <tr key={index}>
-                              <td className="text-center hover-point" onClick={() => { this.modal(table); this.updateTable()} }>{table.number}</td>
-                              <td className="text-center"><a href="#" className="text-danger" onClick={() => this.removeTable(table)}><i className="tim-icons icon-trash-simple"></i></a></td>
-                            </tr>
-                          )
-                      })
+                      
+                        this.state.tables.map((table, index) => {
+                            return (
+                              <tr key={index}>
+                                <td className="text-center hover-point" onClick={() => { this.modal(table); this.updateTable()} }>{table.number}</td>
+                                <td className="text-center"><a href="#" className="text-danger" onClick={() => this.removeTable(table)}><i className="tim-icons icon-trash-simple"></i></a></td>
+                              </tr>
+                            )
+                        })
                     }
                     </tbody>
                   </Table>
