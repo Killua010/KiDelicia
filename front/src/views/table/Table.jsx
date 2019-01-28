@@ -4,6 +4,11 @@ import TableService from '../../services/table/TableService';
 import TableModal from './TableModal';
 import swal from 'sweetalert';
 
+import BlockUi from 'react-block-ui';
+import { Loader } from 'react-loaders';
+import 'react-block-ui/style.css';
+import 'loaders.css/loaders.min.css';
+
 import {
   Card, 
   Row,
@@ -24,7 +29,9 @@ export default class RestaurantTable extends Component {
       statusModal: false,
       tables: [],
       table: {},
-      update: false
+      update: false,
+      loaderType: 'ball-pulse-sync',
+      blocking: false
     };
 
     this.modal = this.modal.bind(this);
@@ -34,6 +41,7 @@ export default class RestaurantTable extends Component {
     this.postTable = this.postTable.bind(this)
     this.deleteTable = this.deleteTable.bind(this)
     this.executeEvent = this.executeEvent.bind(this)
+    this.alterBlockUI = this.alterBlockUI.bind(this)
 
     this.getAllTable()
   }
@@ -45,20 +53,32 @@ export default class RestaurantTable extends Component {
   }
 
   async putTable(table){
+    this.modal()
+    this.alterBlockUI()
     await this.tableService.putTable(table)
     await this.getAllTable()
-    this.modal()
+    this.alterBlockUI()
   }
 
   async postTable(table){
+    this.modal()
+    this.alterBlockUI()
     await this.tableService.postTable(table)
     await this.getAllTable()
-    this.modal()
+    this.alterBlockUI()
   }
 
   async deleteTable(table){
+    this.alterBlockUI()
     await this.tableService.deleteTable(table)
     await this.getAllTable()
+    this.alterBlockUI()
+  }
+
+  alterBlockUI(){
+    this.setState({
+      blocking: !this.state.blocking
+    })
   }
 
   saveTable(){
@@ -127,6 +147,7 @@ export default class RestaurantTable extends Component {
     return (
       
       <div className="content">
+        <BlockUi tag="div" blocking={this.state.blocking} loader={<Loader active type={this.state.loaderType} color="#02a17c"/>}>
             <Col xs="12">
               <Card className="card-chart">
                 <CardHeader>
@@ -175,6 +196,7 @@ export default class RestaurantTable extends Component {
                       event={this.executeEvent}
                       updateData={this.updateData}
                       update={this.state.update}></TableModal>
+                      </BlockUi>
       </div>
     )
   }
