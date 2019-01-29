@@ -15,5 +15,10 @@ import lombok.Setter;
 public class NamedEntity extends DomainEntity {
 
 	private String name;
+	
+	public NamedEntity(String name, Long id, Boolean status) {
+		super(id, status);
+		this.name = name;
+	}
 
 }

@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,5 +29,13 @@ public class Category extends NamedEntity {
 
 	@OneToMany(mappedBy = "category")
 	private Set<Product> products = new HashSet<Product>();
+	
+	public Category(String name) {
+		super(name);
+	}
+
+	public Category(String name, Long id, Boolean status) {
+		super(name, id, status);
+	}
 
 }

@@ -47,7 +47,7 @@ public class Facade<entity extends DomainEntity> implements IFacade {
 		if (null != entity.getId() && (result.getResultEntities().size() == 0 || null == result.getResultEntities().get(0))) {
 			result.setResponse(new StringBuilder("Entidade não encontrada"));	
 		}
-
+		
 		return result;
 	}
 
