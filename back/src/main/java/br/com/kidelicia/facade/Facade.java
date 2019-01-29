@@ -1,6 +1,5 @@
 package br.com.kidelicia.facade;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -34,10 +33,7 @@ public class Facade<entity extends DomainEntity> implements IFacade {
 
 		if (errors.length() == 0) {
 			result.getResultEntities().add(dao.save(entity));
-			result.setHttpStatus(201);
 		} else {
-			result.setHttpStatus(400);
-			result.getResultEntities().add(entity);
 			result.setResponse(errors);
 		}
 		return result;
@@ -49,10 +45,7 @@ public class Facade<entity extends DomainEntity> implements IFacade {
 		result = new Result();
 		result.setResultEntities(dao.find(entity));
 		if (null != entity.getId() && (result.getResultEntities().size() == 0 || null == result.getResultEntities().get(0))) {
-			result.setResponse(new StringBuilder("Entidade não encontrada"));
-			result.setHttpStatus(404);
-		} else {
-			result.setHttpStatus(200);
+			result.setResponse(new StringBuilder("Entidade não encontrada"));	
 		}
 
 		return result;
@@ -69,9 +62,7 @@ public class Facade<entity extends DomainEntity> implements IFacade {
 
 		if (errors.length() == 0) {
 			result.getResultEntities().add(dao.save(entity));
-			result.setHttpStatus(204);
 		} else {
-			result.setHttpStatus(400);
 			result.getResultEntities().add(entity);
 			result.setResponse(errors);
 		}
@@ -82,7 +73,6 @@ public class Facade<entity extends DomainEntity> implements IFacade {
 	public Result delete(DomainEntity entity) {
 		result = new Result();
 		dao.delete(entity);
-		result.setHttpStatus(204);
 		return result;
 	}
 

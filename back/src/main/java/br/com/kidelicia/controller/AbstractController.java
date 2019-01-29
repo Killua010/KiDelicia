@@ -7,7 +7,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,22 +38,42 @@ public abstract class AbstractController <dto extends EntityDto> {
 	
 	@PostMapping
     public @ResponseBody ResponseEntity<Result> save(@Valid @RequestBody dto entity){
-		return restResponse(searchCommand("Save").execute(entity.getEntity()));
+		Result result = searchCommand("Save").execute(entity.getEntity());
+		if(!result.getResponse().toString().isEmpty()) {
+			result.setHttpStatus(400);
+		} else {
+			result.setHttpStatus(201);
+		}
+		return restResponse(result);
     }
 	
 	@GetMapping({"", "/{id}"})
     public @ResponseBody ResponseEntity<Result> find(@PathVariable(value="id",required=false) Long id){
-		return restResponse(searchCommand("Find").execute(entity.getEntity(id)));
+		Result result = searchCommand("Find").execute(entity.getEntity(id));
+		if(!result.getResponse().toString().isEmpty()) {
+			result.setHttpStatus(404);
+		} else {
+			result.setHttpStatus(200);
+		}
+		return restResponse(result);
     }
 	
 	@PutMapping("/{id}")
 	public @ResponseBody ResponseEntity<Result> update(@Valid @RequestBody dto entity, @PathVariable Long id){
-		return restResponse(searchCommand("Update").execute(entity.getEntity(id)));
+		Result result = searchCommand("Update").execute(entity.getEntity(id));
+		if(!result.getResponse().toString().isEmpty()) {
+			result.setHttpStatus(400);
+		} else {
+			result.setHttpStatus(200);
+		}
+		return restResponse(result);
 	}
 	
 	@DeleteMapping("/{id}")
 	public @ResponseBody ResponseEntity<Result> delete(@PathVariable Long id){
-		return restResponse(searchCommand("Delete").execute(entity.getEntity(id)));
+		Result result = searchCommand("Delete").execute(entity.getEntity(id));
+		result.setHttpStatus(204);
+		return restResponse(result);
 	}
 	
 	
