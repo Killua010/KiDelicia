@@ -8,7 +8,7 @@ import { PropTypes } from "prop-types";
 import PerfectScrollbar from "perfect-scrollbar";
 
 // reactstrap components
-import { Nav } from "reactstrap";
+import { Nav, Collapse, Button, CardBody, Card } from "reactstrap";
 
 var ps;
 
@@ -16,6 +16,12 @@ class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.activeRoute.bind(this);
+    this.renderCollapseLink = this.renderCollapseLink.bind(this)
+    this.abrir = this.abrir.bind(this);
+    this.state = { collapse: false };
+  }
+  abrir() {
+    this.setState({ collapse: !this.state.collapse });
   }
   // verifies if routeName is the one active (in browser input)
   activeRoute(routeName) {
@@ -37,6 +43,33 @@ class Sidebar extends React.Component {
   linkOnClick = () => {
     document.documentElement.classList.remove("nav-open");
   };
+  toggle() {
+    this.setState({
+      dropdownOpen: !this.state.dropdownOpen
+    });
+  }
+  renderCollapseLink(prop) {
+    let links = [];
+    for(let i = 0; i < prop.path.length; i++){
+      links.push(
+        <li className={
+            this.activeRoute(prop.path[i]) +
+            (prop.pro ? " active-pro" : "")
+          }
+          key={i}>
+          <NavLink
+            to={prop.layout + prop.path[i]}
+            className="nav-link"
+            activeClassName="active"
+          >
+            <i className={prop.iconChild[i]} />
+            <p>{prop.nameChild[i]}</p>
+          </NavLink>                 
+        </li>
+      )
+    }
+    return links;
+  }
   render() {
     const { bgColor, routes, rtlActive, logo } = this.props;
     let logoImg = null;
@@ -100,25 +133,53 @@ class Sidebar extends React.Component {
           <Nav>
             {routes.map((prop, key) => {
               if (prop.redirect) return null;
-              return (
-                <li
-                  className={
-                    this.activeRoute(prop.path) +
-                    (prop.pro ? " active-pro" : "")
-                  }
-                  key={key}
-                >
-                  <NavLink
-                    to={prop.layout + prop.path}
-                    className="nav-link"
-                    activeClassName="active"
-                    onClick={this.props.toggleSidebar}
+              if(Array.isArray(prop.path)){
+                return(
+                  <li
+                    className={
+                      this.activeRoute(prop.path[0]) +
+                      this.activeRoute(prop.path[1]) +
+                      (prop.pro ? " active-pro" : "")
+                    }
+                   key={key}>
+                    <NavLink onClick={this.abrir}
+                      to="#"
+                      className="nav-link"
+                      activeClassName="active"
+                    >
+                      <i className={prop.icon} />
+                      <p>{prop.name}</p>
+                    </NavLink>                  
+                    <Collapse isOpen={this.state.collapse}>
+                      <ul style={{"listStyleType": "none"}}>
+                        {
+                          this.renderCollapseLink(prop)
+                        }
+                      </ul>
+                    </Collapse>
+                  </li>
+                );
+              } else {
+                return (
+                  <li
+                    className={
+                      this.activeRoute(prop.path) +
+                      (prop.pro ? " active-pro" : "")
+                    }
+                    key={key}
                   >
-                    <i className={prop.icon} />
-                    <p>{rtlActive ? prop.rtlName : prop.name}</p>
-                  </NavLink>
-                </li>
-              );
+                    <NavLink
+                      to={prop.layout + prop.path}
+                      className="nav-link"
+                      activeClassName="active"
+                      onClick={this.props.toggleSidebar}
+                    >
+                      <i className={prop.icon} />
+                      <p>{prop.name}</p>
+                    </NavLink>
+                  </li>
+                );
+              }
             })}
           </Nav>
         </div>

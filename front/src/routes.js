@@ -1,4 +1,5 @@
 import RestaurantTable from "views/table/Table.jsx";
+import CategoryTable from "views/product/category/Category.jsx";
 // import Icons from "views/Icons.jsx";
 // import Map from "views/Map.jsx";
 // import Notifications from "views/Notifications.jsx";
@@ -8,7 +9,15 @@ import RestaurantTable from "views/table/Table.jsx";
 // import UserProfile from "views/UserProfile.jsx";
 
 var routes = [
-   {
+  {
+    path: ["/produto/categoria"],
+    name: "Produtos",
+    nameChild: ["Categorias"],
+    icon: "fas fa-hamburger",
+    iconChild: ["fas fa-cocktail"],
+    component: [CategoryTable],
+    layout: "/admin"
+  },{
     path: "/mesas",
     name: "Mesas",
     icon: "fas fa-chair",

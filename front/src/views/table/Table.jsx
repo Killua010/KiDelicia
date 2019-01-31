@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import TableService from '../../services/table/TableService';
+import GeneralService from '../../services/GeneralService';
 import TableModal from './TableModal';
 import swal from 'sweetalert';
 
@@ -23,7 +23,7 @@ export default class RestaurantTable extends Component {
 
   constructor(props) {
     super(props);
-    this.tableService = new TableService();
+    this.service = new GeneralService("tables");
 
     this.state = {
       statusModal: false,
@@ -42,21 +42,22 @@ export default class RestaurantTable extends Component {
     this.deleteTable = this.deleteTable.bind(this)
     this.executeEvent = this.executeEvent.bind(this)
     this.alterBlockUI = this.alterBlockUI.bind(this)
-    this.alterBlockUIfalse = this.alterBlockUIfalse.bind(this)
     
     this.getAllTable();
   }
 
   getAllTable(){
-    this.tableService.getAllTables().then(val => this.setState({
+    this.service.getAll().then(val => this.setState({
       tables: val
-    })).then(() => this.alterBlockUIfalse())
+    })).then(() => this.setState({
+                blocking: false
+              }))
   }
 
   async putTable(table){
     this.modal()
     this.alterBlockUI()
-    await this.tableService.putTable(table)
+    await this.service.put(table)
     await this.getAllTable()
     this.alterBlockUI()
   }
@@ -64,22 +65,16 @@ export default class RestaurantTable extends Component {
   async postTable(table){
     this.modal()
     this.alterBlockUI()
-    await this.tableService.postTable(table)
+    await this.service.post(table)
     await this.getAllTable()
     this.alterBlockUI()
   }
 
   async deleteTable(table){
     this.alterBlockUI()
-    await this.tableService.deleteTable(table)
+    await this.service.delete(table)
     await this.getAllTable()
     this.alterBlockUI()
-  }
-
-  alterBlockUIfalse(){
-    this.setState({
-      blocking: false
-    })
   }
 
   alterBlockUI(){
