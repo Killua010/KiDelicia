@@ -90,15 +90,11 @@ public abstract class AbstractController<dto extends EntityDto> {
 	}
 
 	private ICommand searchCommand(String operation) {
-		ICommand command = null;
-		for (ICommand cmd : commands) {
-			command = (cmd.getClass().getName().toUpperCase().contains(operation.toUpperCase())) ? cmd : command;
-		}
-		return command;
+		return commands.stream().filter(cmd -> 
+				(cmd.getClass().getName().toUpperCase().contains(operation.toUpperCase()))).findAny().orElse(null);
 	}
 
 	private ResponseEntity<Result> restResponse(Result result) {
-
 		for (Method method : this.standardResponse.getClass().getMethods()) {
 			if (method.getName().contains(result.getHttpStatus().toString())) {
 				try {

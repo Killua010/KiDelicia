@@ -79,17 +79,12 @@ public class Facade<entity extends DomainEntity> implements IFacade {
 	private StringBuilder runStrategys(DomainEntity entity, String operation) {
 		StringBuilder errors = new StringBuilder();
 
-		for (Entry<String, Sequence<entity>> strategy : listNavigations.entrySet()) {
+		listNavigations.entrySet().forEach(strategy -> {
 			if(strategy.getKey().toLowerCase()
 					.equals(operation.concat("_").concat(entity.getClass().getSimpleName()).toLowerCase())) {
-				
-				for(IStrategy<entity> iStrategy : strategy.getValue().getIStrategies()) {
-					errors.append(iStrategy.execute((entity) entity));
-				}
-				
+				strategy.getValue().getIStrategies().forEach(iStr -> errors.append(iStr.execute((entity) entity)));
 			}
-
-		}
+		});
 
 		return errors;
 	}

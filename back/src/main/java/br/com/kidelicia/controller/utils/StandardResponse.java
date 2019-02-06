@@ -64,14 +64,10 @@ public class StandardResponse <dto extends EntityDto> implements HttpResponseEnt
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result.getResponse());
 	}
 	
-	
 	private Idto searchDto(DomainEntity entity){
-		for (Idto dto : this.dtos) {
-			if(dto.getClass().getName().toLowerCase().contains(entity.getClass().getSimpleName().toLowerCase())) {
-				return dto;
-			}
-		}
-		return null;
+		return this.dtos.stream().filter(dto -> 
+			(dto.getClass().getName().toLowerCase().contains(entity.getClass().getSimpleName().toLowerCase())))
+			.findAny().orElse(null);
 	}
 	
 }
