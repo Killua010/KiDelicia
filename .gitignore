@@ -1,6 +1,5 @@
 /front/build
 /front/node_modules
 /front/package-lock.json
-/front
 /diagrams
 /back/Procfile
